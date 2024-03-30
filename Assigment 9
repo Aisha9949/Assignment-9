@@ -1,0 +1,26 @@
+# Install FastAI library
+!pip install fastai
+
+# Import necessary libraries
+from fastai.vision.all import *
+
+# Define paths for the dataset
+path = Path("/path/to/dataset")
+train_path = path/'train'
+test_path = path/'test'
+
+# Load the data
+data = ImageDataLoaders.from_folder(path, train='train', valid='test')
+
+# Define the model architecture
+learn = cnn_learner(data, resnet34, metrics=accuracy)
+
+# Train the model
+learn.fine_tune(4)
+
+# Evaluate the model
+interp = ClassificationInterpretation.from_learner(learn)
+interp.plot_confusion_matrix()
+
+# Make predictions
+preds = learn.get_preds(dl=data.valid)
